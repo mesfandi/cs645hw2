@@ -1,0 +1,13 @@
+<mat-accordion multi="true" *ngIf="forms.length > 0">
+  <mat-expansion-panel *ngFor="let form of forms">
+    <mat-expansion-panel-header>
+      {{ form.personalInfo.name }}
+    </mat-expansion-panel-header>
+    <p>{{ form.content }}</p>
+    <mat-action-row>
+      <button mat-button color="primary">EDIT</button>
+      <button mat-button color="warn">DELETE</button>
+    </mat-action-row>
+  </mat-expansion-panel>
+</mat-accordion>
+<p class="mat-body-1" *ngIf="forms.length <= 0">There is no Post</p>
