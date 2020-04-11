@@ -1,6 +1,21 @@
 <mat-card>
+  <mat-spinner *ngIf="isLoading"></mat-spinner>
+
   <form #surveyForm="ngForm" (submit)="onSubmit(surveyForm)">
     <mat-horizontal-stepper #stepper>
+      <!--
+
+                    ###
+                     #  #    # ######  ####
+                     #  ##   # #      #    #
+                     #  # #  # #####  #    #
+                     #  #  # # #      #    #
+                     #  #   ## #      #    #
+                    ### #    # #       ####
+
+
+-->
+
       <mat-step [stepControl]="firstFormGroup">
         <ng-template matStepLabel>Information</ng-template>
         <h3>PLEASE INTER YOUR PERSONAL INFORMATION?</h3>
@@ -12,7 +27,11 @@
             [type]="info.type"
             [placeholder]="info.placeHolder"
             [name]="info.name"
-            ngModel
+            [ngModel]="
+              mode === 'edit'
+                ? form['address'][info.name] || form['personalInfo'][info.name]
+                : ''
+            "
             required
             #firstName="ngModel"
           />
@@ -33,6 +52,19 @@
         </div>
       </mat-step>
 
+      <!--
+
+                    #######
+                    #     # #####  # #    # #  ####  #    #
+                    #     # #    # # ##   # # #    # ##   #
+                    #     # #    # # # #  # # #    # # #  #
+                    #     # #####  # #  # # # #    # #  # #
+                    #     # #      # #   ## # #    # #   ##
+                    ####### #      # #    # #  ####  #    #
+
+
+-->
+
       <mat-step [stepControl]="secondFormGroup">
         <ng-template matStepLabel>Opinion</ng-template>
         <h3 class="liketext">WHAT DID LIKE MOST ABOUT THE CAMPUS?</h3>
@@ -41,13 +73,17 @@
             *ngFor="let like of likes"
             class="example-margin"
             [name]="like.name"
-            ngModel
+            [ngModel]="mode === 'edit' ? form['liked'][like.name] : ''"
           >
             {{ like.name }}
           </mat-checkbox>
         </section>
         <h3>HOW DO YOU BECAME INTERESTED IN THE UNIVERSITY?</h3>
-        <mat-radio-group *ngFor="let int of intrested" ngModel name="intrested">
+        <mat-radio-group
+          *ngFor="let int of intrested"
+          [ngModel]="mode === 'edit' ? form['intrested'] : ''"
+          name="intrested"
+        >
           <mat-radio-button [value]="int.name">{{ int.name }}</mat-radio-button>
         </mat-radio-group>
         <div>
@@ -65,6 +101,19 @@
         </div>
       </mat-step>
 
+      <!--
+
+                     #####
+                    #     #  ####  #    # #    # ###### #    # #####
+                    #       #    # ##  ## ##  ## #      ##   #   #
+                    #       #    # # ## # # ## # #####  # #  #   #
+                    #       #    # #    # #    # #      #  # #   #
+                    #     # #    # #    # #    # #      #   ##   #
+                     #####   ####  #    # #    # ###### #    #   #
+
+
+-->
+
       <mat-step [stepControl]="thirdFormGroup">
         <ng-template matStepLabel>Comments</ng-template>
 
@@ -72,7 +121,11 @@
           HOW LIKELY DO YOU RECOMMEND THIS SCHOOL TO OTHER PROSPECTIVE STUDENTS?
         </h3>
         <mat-form-field class="comment">
-          <mat-select name="suggest" required ngModel>
+          <mat-select
+            name="suggest"
+            required
+            [ngModel]="mode === 'edit' ? form['suggest'] : ''"
+          >
             <mat-option value="very">Very Likely</mat-option>
             <mat-option value="likely">Likely</mat-option>
             <mat-option value="unlikely">Unlikely</mat-option>
@@ -85,7 +138,7 @@
             rows="6"
             placeholder="Your Commnets"
             name="content"
-            ngModel
+            [ngModel]="mode === 'edit' ? form['content'] : ''"
             required
             #content="ngModel"
           ></textarea>
@@ -108,11 +161,29 @@
         </div>
       </mat-step>
 
+      <!--
+
+                    ######
+                    #     #   ##   ###### ###### #      ######
+                    #     #  #  #  #      #      #      #
+                    ######  #    # #####  #####  #      #####
+                    #   #   ###### #      #      #      #
+                    #    #  #    # #      #      #      #
+                    #     # #    # #      #      ###### ######
+
+
+-->
+
       <mat-step>
         <ng-template matStepLabel>Done</ng-template>
         <h3 class="liketext">ENTER YOUR RAFFLE TO WIN!!!</h3>
         <mat-form-field>
-          <input matInput placeholder="RAFFLE" name="raffle" ngModel />
+          <input
+            matInput
+            placeholder="RAFFLE"
+            name="raffle"
+            [ngModel]="mode === 'edit' ? form['raffle'] : ''"
+          />
         </mat-form-field>
         <div>
           <button mat-stroked-button color="accent" matStepperPrevious>

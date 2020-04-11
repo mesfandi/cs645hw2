@@ -1,6 +1,8 @@
 import { Component, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, Validators, NgForm } from "@angular/forms";
 import { FormService } from "../form.service";
+import { ActivatedRoute, ParamMap } from "@angular/router";
+import { Form } from "../form.model";
 
 @Component({
   selector: "app-form-create",
@@ -17,7 +19,7 @@ export class FormCreateComponent implements OnInit {
     { name: "zip", placeHolder: "Zip", type: "text" },
     { name: "tel", placeHolder: "Telephone", type: "number" },
     { name: "email", placeHolder: "Email", type: "email" },
-    { name: "db", placeHolder: "Date of Birst", type: "date" },
+    { name: "dateOfBirth", placeHolder: "Date of Birst", type: "date" },
   ];
   likes = [
     { name: "student" },
@@ -34,12 +36,15 @@ export class FormCreateComponent implements OnInit {
     { name: "internet" },
     { name: "other" },
   ];
+
   onSubmit(form: NgForm) {
     if (form.invalid) {
       return;
     }
+    this.isLoading = true;
 
     const thisForm = {
+      _id: null,
       suggest: form.value.suggest,
       content: form.value.content,
       raffle: form.value.raffle,
@@ -49,38 +54,63 @@ export class FormCreateComponent implements OnInit {
       personalInfo: {
         firstName: form.value.firstName,
         lastName: form.value.lastName,
-        db: form.value.db,
+        dateOfBirth: form.value.dateOfBirth,
       },
       address: {
+        street: form.value.street,
         city: form.value.city,
-        state: form.value.State,
+        state: form.value.state,
         zip: form.value.zip,
         tel: form.value.tel,
         email: form.value.email,
       },
       liked: {
-        student: form.value.student,
-        location: form.value.location,
-        campus: form.value.campus,
-        atmosphere: form.value.atmosphere,
-        doreroom: form.value.doreroom,
-        sports: form.value.sports,
+        student: form.value.student || false,
+        location: form.value.location || false,
+        campus: form.value.campus || false,
+        atmosphere: form.value.atmosphere || false,
+        doreroom: form.value.doreroom || false,
+        sports: form.value.sports || false,
       },
     };
-
-    this.formService.addForm(thisForm);
+    if (this.mode === "create") {
+      this.formService.addForm(thisForm);
+    } else {
+      this.formService.updateForm(this.formId, thisForm);
+    }
     form.resetForm();
   }
-  isLinear = false;
+  mode = "create";
+  private formId: string;
+  form: Form;
+  isLoading = false;
   firstFormGroup: FormGroup;
   secondFormGroup: FormGroup;
   thirdFormGroup: FormGroup;
   constructor(
     private _formBuilder: FormBuilder,
-    public formService: FormService
+    public formService: FormService,
+    public route: ActivatedRoute
   ) {}
 
   ngOnInit() {
+    this.route.paramMap.subscribe((paramMap: ParamMap) => {
+      if (paramMap.has("postId")) {
+        this.mode = "edit";
+        this.formId = paramMap.get("postId");
+        this.isLoading = true;
+
+        this.formService.getForm(this.formId).subscribe((formData) => {
+          this.isLoading = false;
+
+          this.form = formData;
+        });
+      } else {
+        this.mode = "create";
+        this.formId = null;
+      }
+    });
+
     this.firstFormGroup = this._formBuilder.group({
       firstCtrl: ["", Validators.required],
     });

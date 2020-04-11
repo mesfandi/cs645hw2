@@ -10,17 +10,25 @@ import { Subscription } from "rxjs";
 })
 export class FormDisplayComponent implements OnInit, OnDestroy {
   forms: Form[] = [];
+  isLoading = false;
   private formsSub: Subscription;
   constructor(public formService: FormService) {}
   ngOnInit() {
-    this.forms = this.formService.getForms();
+    this.isLoading = true;
+
+    this.formService.getForms();
     this.formsSub = this.formService
       .getFormUpdateListener()
       .subscribe((forms: Form[]) => {
+        this.isLoading = false;
         this.forms = forms;
       });
   }
   ngOnDestroy() {
     this.formsSub.unsubscribe();
+  }
+
+  onDelete(formId: string) {
+    this.formService.deleteForm(formId);
   }
 }

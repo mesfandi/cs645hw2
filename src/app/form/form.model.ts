@@ -1,4 +1,5 @@
 export interface Form {
+  _id: string;
   suggest: string;
   content: string;
   raffle: string;
@@ -22,9 +23,10 @@ export interface Form {
   personalInfo: {
     firstName: string;
     lastName: string;
-    db: string;
+    dateOfBirth: string;
   };
   address: {
+    street: string;
     city: string;
     state: string;
     zip: string;
