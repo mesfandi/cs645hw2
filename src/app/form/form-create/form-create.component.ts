@@ -51,27 +51,21 @@ export class FormCreateComponent implements OnInit {
 
       intrested: form.value.intrested,
 
-      personalInfo: {
-        firstName: form.value.firstName,
-        lastName: form.value.lastName,
-        dateOfBirth: form.value.dateOfBirth,
-      },
-      address: {
-        street: form.value.street,
-        city: form.value.city,
-        state: form.value.state,
-        zip: form.value.zip,
-        tel: form.value.tel,
-        email: form.value.email,
-      },
-      liked: {
-        student: form.value.student || false,
-        location: form.value.location || false,
-        campus: form.value.campus || false,
-        atmosphere: form.value.atmosphere || false,
-        doreroom: form.value.doreroom || false,
-        sports: form.value.sports || false,
-      },
+      firstName: form.value.firstName,
+      lastName: form.value.lastName,
+      dateOfBirth: form.value.dateOfBirth,
+      street: form.value.street,
+      city: form.value.city,
+      state: form.value.state,
+      zip: form.value.zip,
+      tel: form.value.tel,
+      email: form.value.email,
+      student: form.value.student || false,
+      location: form.value.location || false,
+      campus: form.value.campus || false,
+      atmosphere: form.value.atmosphere || false,
+      doreroom: form.value.doreroom || false,
+      sports: form.value.sports || false,
     };
     if (this.mode === "create") {
       this.formService.addForm(thisForm);
@@ -104,6 +98,7 @@ export class FormCreateComponent implements OnInit {
           this.isLoading = false;
 
           this.form = formData;
+          console.log(formData);
         });
       } else {
         this.mode = "create";

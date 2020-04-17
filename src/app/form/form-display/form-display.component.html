@@ -2,7 +2,7 @@
 <mat-accordion multi="true" *ngIf="forms.length > 0 && !isLoading">
   <mat-expansion-panel *ngFor="let form of forms" [expanded]="true">
     <mat-expansion-panel-header>
-      {{ form.personalInfo.firstName }}
+      {{ form.firstName }}
     </mat-expansion-panel-header>
     <p>{{ form.content }}</p>
     <mat-action-row>

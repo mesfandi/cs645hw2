@@ -27,11 +27,7 @@
             [type]="info.type"
             [placeholder]="info.placeHolder"
             [name]="info.name"
-            [ngModel]="
-              mode === 'edit'
-                ? form['address'][info.name] || form['personalInfo'][info.name]
-                : ''
-            "
+            [ngModel]="mode === 'edit' ? form[info.name] : ''"
             required
             #firstName="ngModel"
           />
@@ -73,7 +69,7 @@
             *ngFor="let like of likes"
             class="example-margin"
             [name]="like.name"
-            [ngModel]="mode === 'edit' ? form['liked'][like.name] : ''"
+            [ngModel]="mode === 'edit' ? form[like.name] : ''"
           >
             {{ like.name }}
           </mat-checkbox>
@@ -124,7 +120,7 @@
           <mat-select
             name="suggest"
             required
-            [ngModel]="mode === 'edit' ? form['suggest'] : ''"
+            [ngModel]="mode === 'edit' ? form.suggest : ''"
           >
             <mat-option value="very">Very Likely</mat-option>
             <mat-option value="likely">Likely</mat-option>
